@@ -59,3 +59,28 @@ class Pitch(db.Model):
 
     def __repr__(self):
         return f"Pitch('{self.id}', '{self.time}')"
+
+
+
+class Comment(db.Model):
+
+    __tablename__ = 'comments'
+
+    id = db.Column(db.Integer, primary_key=True)
+    post_comment = db.Column(db.String(255), index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    pitches = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    time = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def save_comment(self):
+        ''' Save the comments '''
+        db.session.add(self)
+        db.session.commit()
+
+
+    # display comments
+
+    @classmethod
+    def get_comments(cls, id):
+        comments = Comment.query.filter_by(pitch_id=id).all()
+        return comments
