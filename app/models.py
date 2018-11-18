@@ -84,3 +84,22 @@ class Comment(db.Model):
     def get_comments(cls, id):
         comments = Comment.query.filter_by(pitch_id=id).all()
         return comments
+
+
+
+class Countvotes(db.Model):
+    __tablename__ = 'countvotes'
+
+    id = db.Column(db. Integer, primary_key=True)
+    votecounter = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    pitches = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+
+    def save_votecounter(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_votecounter(cls,user_id,pitches):
+        votecounter = Countvotes.query.filter_by(user_id=user_id, pitches=pitches).all()
+        return votecounter
