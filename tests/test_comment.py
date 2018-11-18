@@ -1,33 +1,37 @@
 import unittest
-from app.models import Review
+from app.models import Comment,User
+from flask_login import current_user
+from app import db
 
-class TestReview(unittest.TestCase):
+class TestComment(unittest.TestCase):
 
     def setUp(self):
-        self.new_review = Review(12345,'Review for movies',"https://image.tmdb.org/t/p/w500/jdjdjdjn",'This movie is the best thing since sliced bread')
-
+        self.new_user = User(username = 'Thomas', password = 'totopitch', email = 'nstcephas@gmail.com')
+        self.new_comment = Comment(id=1, post_comment="this is a nice pitch post", category_id='funny', pitches="what a nice pitch", user_id = self.new_user)
 
     def tearDown(self):
-        Review.clear_reviews()
+        Comment.query.delete()
+        User.query.delete()
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.new_review,Review))
+        self.assertTrue(isinstance(self.new_comment,Comment))
 
 
     def test_check_instance_variables(self):
-        self.assertEquals(self.new_review.movie_id,12345)
-        self.assertEquals(self.new_review.title,'Review for movies')
-        self.assertEquals(self.new_review.imageurl,"https://image.tmdb.org/t/p/w500/jdjdjdjn")
-        self.assertEquals(self.new_review.review,'This movie is the best thing since sliced bread')
+        self.assertEquals(self.new_comment.id,1)
+        self.assertEquals(self.new_comment.post_comment,"this is a nice pitch post")
+        self.assertEquals(self.new_comment.category_id,'funny')
+        self.assertEquals(self.new_comment.pitch, 'what a nice pitch')
+        self.assertEquals(self.new_comment.user,self.new_user)
 
 
-    def test_save_review(self):
-        self.new_review.save_review()
-        self.assertTrue(len(Review.all_reviews)>0)
+    def test_save_comment(self):
+        self.new_comment.save_comment()
+        self.assertTrue(len(Comment.query.all())>0)
 
 
-    def test_get_review_by_id(self):
+    def test_get_comment_by_id(self):
 
-        self.new_review.save_review()
-        got_reviews = Review.get_reviews(12345)
-        self.assertTrue(len(got_reviews) == 1)
+        self.new_comment.save_comment()
+        got_comments = Comment.get_comments(12345)
+        self.assertTrue(len(got_comments) == 1)
