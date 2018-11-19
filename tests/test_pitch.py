@@ -6,9 +6,9 @@ from app import db
 class TestPitch(unittest.TestCase):
 
     def setUp(self):
-        self.user_Melissa = User(username = 'Melissa',
-                                 password = 'potato',
-                                 email = 'melissa@ms.com')
+        self.user_Melissa = User(username = 'Thomas',
+                                 password = 'totopitch',
+                                 email = 'nstcephas@gmail.com')
         self.new_pitch = Pitch(id=12345,
                                      title='Pitch itself',
                                      content="this is a nice pitch post",
