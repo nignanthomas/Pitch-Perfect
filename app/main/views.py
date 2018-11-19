@@ -4,7 +4,7 @@ from . import main
 from .forms import ReviewForm
 from ..models import Review
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 
 
