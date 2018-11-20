@@ -65,7 +65,7 @@ class Pitch(db.Model):
     # display pitches
     @classmethod
     def get_pitches(id):
-        pitches = Pitch.query.filter_by(category_id = id).all()
+        pitches = Pitch.query.filter_by(category = id).all()
         return pitches
 
     def __repr__(self):
@@ -80,8 +80,9 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_comment = db.Column(db.String(255), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    pitches = db.Column(db.Integer, db.ForeignKey('pitches.id'))
-    time = db.Column(db.DateTime, default=datetime.utcnow)
+    pitch_id = db.Column(db.Integer, db.ForeignKey('pitches.id'))
+    date = db.Column(db.String)
+    time = db.Column(db.String)
 
     def save_comment(self):
         ''' Save the comments '''
