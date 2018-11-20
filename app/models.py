@@ -50,11 +50,12 @@ class Pitch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title= db.Column(db.String(300), index=True)
     content = db.Column(db.String(300), index=True)
-    category_id = db.Column(db.String)
+    category = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     comments = db.relationship('Comment', backref='pitch', lazy="dynamic")
     votecounter = db.relationship("Countvotes", backref="pitch", lazy="dynamic")
-    time = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.String)
+    time = db.Column(db.String)
 
     def save_pitch(self, pitch):
         ''' Save the pitches '''

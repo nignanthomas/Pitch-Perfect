@@ -1,10 +1,9 @@
-from flask import render_template,request,redirect,url_for,abort
+from flask import render_template,request,redirect,url_for,abort,flash
 from . import main
-# from ..requests import get_movies,get_movie,search_movie
-from .forms import ReviewForm,UpdateProfile
-from ..models import Review,User
+from .forms import PitchForm,CommentForm,UpdateProfile
+from ..models import User,Pitch,Comment
 from .. import db,photos
-
+import markdown2
 from flask_login import login_required, current_user
 
 
@@ -17,66 +16,65 @@ def index():
     '''
     View root page function that returns the index page and its data
     '''
+    pitches = Pitch.query.all()
+    title = "Pitch-Perfect \\ Home"
+    return render_template('index.html', title = title, pitches = pitches)
 
-    # Getting popular movie
-    popular_movies = get_movies('popular')
-    upcoming_movie = get_movies('upcoming')
-    now_showing_movie = get_movies('now_playing')
 
-    title = 'Home - Welcome to The best Movie Review Website Online'
 
-    search_movie = request.args.get('movie_query')
+@main.route('/pitches/<category>')
+def pitches_category(category):
 
-    if search_movie:
-        return redirect(url_for('.search',movie_name=search_movie))
+    '''
+    View function that returns pitches by category
+    '''
+    title = f'Pitch-Perfect \\ {category.upper}'
+    if category = "all":
+        pitches = Pitch.query.order_by(Pitch.time.desc())
     else:
-        return render_template('index.html', title = title, popular = popular_movies, upcoming = upcoming_movie, now_showing = now_showing_movie )
+        pitches = Pitch.query.filter_by(category=category).order_by(Pitch.time.desc()).all()
 
-
-@main.route('/movie/<int:id>')
-def movie(id):
-
-    '''
-    View movie page function that returns the movie details page and its data
-    '''
-    movie = get_movie(id)
-    title = f'{movie.title}'
-    reviews = Review.get_reviews(movie.id)
-
-    return render_template('movie.html',title = title,movie = movie,reviews = reviews)
+    return render_template('pitches.html',title = title,pitches = pitches)
 
 
 
-@main.route('/search/<movie_name>')
-def search(movie_name):
-    '''
-    View function to display the search results
-    '''
-    movie_name_list = movie_name.split(" ")
-    movie_name_format = "+".join(movie_name_list)
-    searched_movies = search_movie(movie_name_format)
-    title = f'search results for {movie_name}'
-    return render_template('search.html',movies = searched_movies)
+@main.route('/<uname>/new/pitch', methods=['GET','POST'])
+@login_required
+def new_pitch():
+    form = PitchForm()
 
+    user = User.query.filter_by(username = uname).first()
 
-@main.route('/movie/review/new/<int:id>', methods = ['GET','POST'])
-def new_review(id):
+    if user is None:
+        abort(404)
 
-    form = ReviewForm()
-
-    movie = get_movie(id)
+    title_page = "Pitch-Perfect \\ Add New Pitch"
 
     if form.validate_on_submit():
-        title = form.title.data
-        review = form.review.data
 
-        new_review = Review(movie.id,title,movie.poster,review)
-        new_review.save_review()
+        title=form.title.data
+        content=form.content.data
+        category=form.category.data
+        date = datetime.datetime.now()
+        time = str(date.time())
+        time = time[0:5]
+        date = str(date)
+        date = date[0:10]
+        pitch = Pitch(title=title,
+                      content=content,
+                      category=category,
+                      user=current_user,
+                      date = date,
+                      time = time)
 
-        return redirect(url_for('.movie',id = movie.id ))
+        db.session.add(pitch)
+        db.session.commit()
 
-    title = f'{movie.title} review'
-    return render_template('new_review.html',title = title, review_form=form, movie=movie)
+        # pitch.save_pitch(pitch)
+        flash('Your pitch has been created!', 'success')
+        return redirect(url_for('main.pitch_categories',category = category))
+
+    return render_template('new_pitch.html', title=title_page, form=form)
 
 
 
