@@ -26,11 +26,17 @@ class ProdConfig(Config):
     pass
 
 
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://thomas:psqltoto29@localhost/pitchperfect_test'
+
+
+
 class DevConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://thomas:psqltoto29@localhost/pitchperfect'
     DEBUG = True
 
 config_options = {
 'development':DevConfig,
-'production':ProdConfig
-
+'production':ProdConfig,
+'test':TestConfig
 }
