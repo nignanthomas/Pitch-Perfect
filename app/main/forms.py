@@ -2,12 +2,30 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,TextAreaField,SubmitField
 from wtforms.validators import Required
 
-class ReviewForm(FlaskForm):
+class PitchForm(FlaskForm):
 
-    title = StringField('Review title',validators=[Required()])
-    review = TextAreaField('Movie review', validators=[Required()])
+    title = StringField('Pitch title')
+    category_id = SelectField('Pitch Category', choices=[('pickup-lines', 'pickup-lines'),
+                                                      ('motivational', 'motivational'),
+                                                      ('promotion', 'promotion'),
+                                                      ('funny', 'funny'),
+                                                      ('random', 'random')])
+    content = TextAreaField('Type Here',validators=[Required()])
+    submit = SubmitField('Create Pitch')
+
+
+class CommentForm(FlaskForm):
+
+    title = StringField('Comment Title')
+    comment = TextAreaField('Post Of The Comment')
     submit = SubmitField('Submit')
 
+#########################################
+class CategoryForm(FlaskForm):
+
+    title = StringField('Pitch title')
+    pitch = TextAreaField('Post Of The Comment')
+    submit = SubmitField('Submit')
 
 ########################################
 
