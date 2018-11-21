@@ -1,52 +1,42 @@
-{% extends 'base.html'%}
-{% import 'macros.html' as macro%}
-
-<!-- Styles block -->
+{% extends "base.html" %}
 
 {% block styles%}
-    {{ super() }}
-    <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
-{% endblock %}
-<!-- Content block -->
-{% block content %}
-
-<div class="container">
-    <form>
-        <input type="text" name="movie_query" placeholder="Search for a Movie" class="form-control">
-        <input type="submit"  value="Submit" class="btn btn-default">
-    </form>
-
-</div>
-
-<div class="container">
-
-    <!-- Popular movie -->
-    <div class="row">
-        <h3> Popular Movies</h3>
-        <ul>
-            {{ macro.displayMovieList(popular)}}
-        </ul>
-    </div>
-    <!-- Upcoming movie  -->
-    <div class="row">
-
-        <h3> Upcoming Movies </h3>
-        <ul>
-            {{ macro.displayMovieList(upcoming)}}
-        </ul>
-    </div>
-
-    <!-- Now showing movie -->
-    <div class="row">
-
-        <h3>Now Showing</h3>
-        <ul>
-            {{ macro.displayMovieList(now_showing)}}
-        </ul>
-    </div>
-
-</div>
-
-
-
+{{ super() }}
+<link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
 {% endblock%}
+
+
+{% block content %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+        {% endfor %}
+    <h1 class="text-center animated lightSpeedIn delay-0.4s">Welcome to PITCH PERFECT</h1>
+        <h2 class="text-center">Categories</h2>
+        <div class="row categories">
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <a href="{{url_for('main.pitches_category',category='pickup-lines')}}">PickUp-Lines</a>
+            </div>
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+              <a href="{{url_for('main.pitches_category',category='motivational')}}">Motivational</a>
+            </div>
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+              <a href="{{url_for('main.pitches_category',category='promotion')}}">Promotion</a>
+            </div>
+        </div>
+        <div class="row categories">
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+              <a href="{{url_for('main.pitches_category',category='funny')}}">Funny</a>
+            </div>
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+              <a href="{{url_for('main.pitches_category',category='random')}}">Random</a>
+            </div>
+            <div class="category col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <a href="{{url_for('main.pitches_category',category='all')}}">All</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
