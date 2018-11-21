@@ -1,3 +1,7 @@
 Hello {{user.username}}
-Welcome to Pitch-Perfect
-We have just seen you have signed up for our application and want to welcome you to the family. Please enjoy the our one minute pitches.
+Welcome to Pitch-Perfect by nignanthomas.
+
+We have just seen you have signed up for our application and want to welcome you to the family.
+Please enjoy our one minute pitches and fell free to also submit yours.
+
+Thanks!
