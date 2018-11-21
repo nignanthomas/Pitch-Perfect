@@ -29,7 +29,7 @@ def pitches_category(category):
     View function that returns pitches by category
     '''
     title = f'Pitch-Perfect \\ {category.upper}'
-    if category = "all":
+    if category == "all":
         pitches = Pitch.query.order_by(Pitch.time.desc())
     else:
         pitches = Pitch.query.filter_by(category=category).order_by(Pitch.time.desc()).all()
