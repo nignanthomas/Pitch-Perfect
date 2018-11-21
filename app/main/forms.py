@@ -10,7 +10,7 @@ class PitchForm(FlaskForm):
                                                       ('promotion', 'promotion'),
                                                       ('funny', 'funny'),
                                                       ('random', 'random')])
-    content = TextAreaField('Type Here',validators=[Required()])
+    content = TextAreaField('Type Here')
     submit = SubmitField('Create Pitch')
 
 

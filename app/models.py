@@ -24,7 +24,6 @@ class User(UserMixin,db.Model):
     password_hash = db.Column(db.String(255))
     pitches = db.relationship('Pitch', backref='user', lazy="dynamic")
     comments = db.relationship("Comment", backref="user", lazy="dynamic")
-    votecounter = db.relationship("Countvotes", backref="user", lazy="dynamic")
 
 
     @property
@@ -53,7 +52,7 @@ class Pitch(db.Model):
     category = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     comments = db.relationship('Comment', backref='pitch', lazy="dynamic")
-    votecounter = db.relationship("Countvotes", backref="pitch", lazy="dynamic")
+
     date = db.Column(db.String)
     time = db.Column(db.String)
 
@@ -90,8 +89,8 @@ class Comment(db.Model):
         db.session.commit()
 
 
-    # display comments
 
+    # display comments
     @classmethod
     def get_comments(cls, id):
         comments = Comment.query.filter_by(pitch_id=id).all()
@@ -99,19 +98,19 @@ class Comment(db.Model):
 
 
 
-class Countvotes(db.Model):
-    __tablename__ = 'countvotes'
-
-    id = db.Column(db. Integer, primary_key=True)
-    votecounter = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    pitches = db.Column(db.Integer, db.ForeignKey("pitches.id"))
-
-    def save_votecounter(self):
-        db.session.add(self)
-        db.session.commit()
-
-    @classmethod
-    def get_votecounter(cls,user_id,pitches):
-        votecounter = Countvotes.query.filter_by(user_id=user_id, pitches=pitches).all()
-        return votecounter
+# class Countvotes(db.Model):
+#     __tablename__ = 'countvotes'
+#
+#     id = db.Column(db. Integer, primary_key=True)
+#     votecounter = db.Column(db.Integer)
+#     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+#     pitches = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+#
+#     def save_votecounter(self):
+#         db.session.add(self)
+#         db.session.commit()
+#
+#     @classmethod
+#     def get_votecounter(cls,user_id,pitches):
+#         votecounter = Countvotes.query.filter_by(user_id=user_id, pitches=pitches).all()
+#         return votecounter

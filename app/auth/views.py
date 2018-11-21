@@ -20,7 +20,7 @@ def login():
             login_user(user,login_form.remember.data)
             return redirect(request.args.get('next') or url_for('main.index'))
 
-    flash('Invalid username or password /!\\')
+    flash('Invalid username or password !')
 
     title = "Pitch-Perfect -- Login Form"
     return render_template('auth/login.html',login_form = login_form,title = title)
@@ -43,10 +43,11 @@ def register():
 
         mail_message("Welcome to Pitch-Perfect","email/welcome_user",user.email,user=user)
 
-        title = "Pitch-Perfect -- New Account"
+
 
         return redirect(url_for('auth.login'))
-
+        
+    title = "Pitch-Perfect -- New Account"
     return render_template('auth/register.html',registration_form = form, title = title)
 
 

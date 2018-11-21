@@ -5,7 +5,7 @@ from ..models import User,Pitch,Comment
 from .. import db,photos
 import markdown2
 from flask_login import login_required, current_user
-
+import datetime
 
 
 
@@ -17,7 +17,7 @@ def index():
     View root page function that returns the index page and its data
     '''
     pitches = Pitch.query.all()
-    title = "Pitch-Perfect \\ Home"
+    title = "Pitch-Perfect -- Home"
     return render_template('index.html', title = title, pitches = pitches)
 
 
@@ -28,7 +28,7 @@ def pitches_category(category):
     '''
     View function that returns pitches by category
     '''
-    title = f'Pitch-Perfect \\ {category.upper}'
+    title = f'Pitch-Perfect -- {category.upper()}'
     if category == "all":
         pitches = Pitch.query.order_by(Pitch.time.desc())
     else:
@@ -40,7 +40,7 @@ def pitches_category(category):
 
 @main.route('/<uname>/new/pitch', methods=['GET','POST'])
 @login_required
-def new_pitch():
+def new_pitch(uname):
     form = PitchForm()
 
     user = User.query.filter_by(username = uname).first()
@@ -48,7 +48,7 @@ def new_pitch():
     if user is None:
         abort(404)
 
-    title_page = "Pitch-Perfect \\ Add New Pitch"
+    title_page = "Pitch-Perfect -- Add New Pitch"
 
     if form.validate_on_submit():
 
@@ -70,9 +70,7 @@ def new_pitch():
         db.session.add(pitch)
         db.session.commit()
 
-        # pitch.save_pitch(pitch)
-        flash('Your pitch has been created!', 'success')
-        return redirect(url_for('main.pitch_categories',category = category))
+        return redirect(url_for('main.pitches_category',category = category))
 
     return render_template('new_pitch.html', title=title_page, form=form)
 
@@ -81,12 +79,12 @@ def new_pitch():
 
 @main.route("/<uname>/pitch/<pitch_id>/new/comment", methods = ["GET","POST"])
 @login_required
-def comment(uname,pitch_id):
+def new_comment(uname,pitch_id):
     user = User.query.filter_by(username = uname).first()
     pitch = Pitch.query.filter_by(id = pitch_id).first()
 
     form = CommentForm()
-    title_page = "Pitch-Perfect \\ Comment Pitch"
+    title_page = "Pitch-Perfect -- Comment Pitch"
 
     if form.validate_on_submit():
         title = form.title.data
@@ -110,8 +108,8 @@ def comment(uname,pitch_id):
 @login_required
 def display_comments(pitch_id):
     pitch = Pitch.query.filter_by(id = pitch_id).first()
-    title = "Pitch-Perfect \\ Comments"
-    comments = get_comments(pitch_id)
+    title = "Pitch-Perfect -- Comments"
+    comments = Comment.get_comments(pitch_id)
 
     return render_template("display_comments.html", comments = comments,pitch = pitch,title = title)
 
