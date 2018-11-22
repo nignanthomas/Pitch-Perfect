@@ -107,6 +107,7 @@ def new_comment(uname,pitch_id):
 @main.route("/<pitch_id>/comments")
 @login_required
 def display_comments(pitch_id):
+    # user = User.query.filter_by(username = current_user).first()
     pitch = Pitch.query.filter_by(id = pitch_id).first()
     title = "Pitch-Perfect -- Comments"
     comments = Comment.get_comments(pitch_id)

@@ -1,13 +1,7 @@
-ul
-{
-    list-style-type: none;
-}
- .movie-card  a
- {
-      color: green;
- }
- .movie-card  a:hover
- {
-     padding-bottom: 20px;
-      border-bottom: 1px solid green;
- }
+/* body {
+  background: url('../static/photos/main-background.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+} */
